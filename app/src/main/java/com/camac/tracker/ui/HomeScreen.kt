@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -362,7 +363,7 @@ private fun QuickTile(
 // =====================================================================
 
 @Composable
-private fun InfoCard(content: @Composable () -> Unit) {
+private fun InfoCard(content: @Composable ColumnScope.() -> Unit) {
     ElevatedCard(
         Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),

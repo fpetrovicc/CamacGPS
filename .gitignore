@@ -27,3 +27,6 @@ keystore.properties
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# --- Privatni kontekst za Claude Code ---
+CLAUDE.local.md
