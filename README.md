@@ -15,16 +15,17 @@
 
 ---
 
-Tata drži čamac na Savi i na njemu ima GPS tracker (TKSTAR TK915). Tracker se podešava SMS porukama
-tipa `upload123456 60` ili `move123456 0100`, koje niko ne pamti, a kad ga pitaš gde je, odgovori ovako:
+Mnogi GPS trackeri za čamce, vozila i opremu (TKSTAR TK915 i slični) podešavaju se SMS porukama
+tipa `upload123456 60` ili `move123456 0100`. Te komande je teško pamtiti, a odgovor trackera
+izgleda ovako:
 
 ```
-lat:44.86149
-lon:19.72416
+lat:44.80000
+lon:20.46000
 Spd:000
 T:26/10/23 18:20
 bat:31%
-http://maps.google.com/maps?q=N44.86149,E19.72416
+http://maps.google.com/maps?q=N44.80000,E20.46000
 ```
 
 Čamac GPS sve to pretvara u par velikih dugmadi i jedan pregledan ekran. Nema servera, naloga ni pretplate.
@@ -88,7 +89,7 @@ približne koordinate čamca, i kad na GitHub-u proverava da li postoji nova ver
 ## Ograničenja
 
 - Testirano sa TKSTAR TK915 (firmver `XM_TK915_SW_6.2`). TK905 i slični klonovi koriste iste komande,
-  ali ih nisam lično probao.
+  ali nisu posebno testirani.
 - Svaka komanda je jedan SMS sa tvog kredita, a svaki odgovor jedan SMS sa kredita SIM kartice u trackeru.
 - U istoriji su samo pozicije koje je tracker poslao SMS-om. Detaljna ruta pecanja je na serveru
   na koji tracker šalje podatke (Ruhavik, TKSTAR…).
@@ -128,8 +129,8 @@ podrška za druge modele. Više u [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## English
 
-My dad keeps a boat on the Sava river with a TKSTAR TK915 GPS tracker on board. The tracker is configured
-through SMS commands like `upload123456 60`, which nobody remembers, and its replies are a wall of
+Many GPS trackers for boats, vehicles and equipment (TKSTAR TK915 and similar) are configured through
+SMS commands like `upload123456 60`, which are hard to remember, and their replies are a wall of
 coordinates. Čamac GPS (*čamac* means boat) turns that into a few big buttons and one clear screen.
 There's no server, no account and no subscription. The app sends plain SMS from the phone and reads the reply.
 
