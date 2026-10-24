@@ -21,8 +21,8 @@ android {
         applicationId = "com.camac.tracker"
         minSdk = 26
         targetSdk = 35
-        versionCode = 2
-        versionName = "1.1.0"
+        versionCode = 3
+        versionName = "1.2.0"
 
         // GitHub repozitorijum za auto-update (Releases). Prazno = isključeno.
         buildConfigField("String", "UPDATE_REPO", "\"fpetrovicc/CamacGPS\"")

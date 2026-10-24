@@ -12,7 +12,7 @@ odgovore iz sistemskog SMS sandučeta. Nema backend-a. Open source, MIT.
 - Repo: https://github.com/fpetrovicc/CamacGPS (javan, grana `main`)
 - Lokalno: `D:\Projects\Github\CamacGPS` (Windows 11, PowerShell)
 - Paket: `com.camac.tracker`, debug: `com.camac.tracker.debug` („Čamac GPS (test)”)
-- Verzija: `versionCode 2`, `versionName "1.1.0"`, minSdk 26, targetSdk/compileSdk 35
+- Verzija: `versionCode 3`, `versionName "1.2.0"`, minSdk 26, targetSdk/compileSdk 35
 - Ciljni telefon korisnika: Samsung Galaxy A56 (Android 15+, One UI)
 - **Jezik:** korisnik (Filip) piše na srpskom, latinicom — odgovaraj tako. Sav tekst u aplikaciji je
   srpski latinica. Kod i komentari: komentari na srpskom, identifikatori na engleskom.

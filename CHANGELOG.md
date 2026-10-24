@@ -4,6 +4,8 @@ Format prati [Keep a Changelog](https://keepachangelog.com/), verzije prate [Sem
 
 ## [Unreleased]
 
+## [1.2.0] — 2026-10-24
+
 ### Dodato
 - Podsetnik „Nema podataka od trackera X dana” na Početnoj i kao notifikacija, sa dugmadima
   „Pošalji proveru” i „U redu”. Aplikacija ne šalje SMS sama; broj dana se menja u Podešavanjima.
