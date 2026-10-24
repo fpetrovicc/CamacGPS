@@ -10,6 +10,12 @@ updates:
         patterns: ["androidx.*"]
       kotlin:
         patterns: ["org.jetbrains.kotlin*"]
+    # AGP 9 menja DSL i traži Gradle 9 — major verzije ručno, kad sve bude stabilno
+    ignore:
+      - dependency-name: "com.android.application"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "gradle-wrapper"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: /
