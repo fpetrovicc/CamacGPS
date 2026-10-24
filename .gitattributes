@@ -1,0 +1,19 @@
+# Unix kraj reda za sve tekstualne fajlove (CI radi na Linuxu)
+* text=auto eol=lf
+
+# Windows skripte ostaju CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# gradlew mora biti LF ili CI pada sa "bad interpreter"
+gradlew text eol=lf
+
+# Binarni fajlovi
+*.jar binary
+*.ttf binary
+*.png binary
+*.jpg binary
+*.webp binary
+*.jks binary
+*.keystore binary

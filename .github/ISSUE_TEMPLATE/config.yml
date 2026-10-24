@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Bezbednosni problem
+    url: https://github.com/fpetrovicc/CamacGPS/security/advisories/new
+    about: Prijavi privatno, ne kao javni issue.

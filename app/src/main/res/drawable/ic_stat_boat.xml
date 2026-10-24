@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Jednobojna ikonica za statusnu traku (notifikacije) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path android:fillColor="#FFFFFFFF" android:pathData="M12.5,2a1.5,1.5 0,1 1,0 3a1.5,1.5 0,1 1,0 -3zM12,5.5h1v3h-1z" />
+    <path android:fillColor="#FFFFFFFF" android:pathData="M8,8.5h8v4.5H8z" />
+    <path android:fillColor="#FFFFFFFF" android:pathData="M3,13.5h18l-3,5H6z" />
+    <path android:fillColor="#FFFFFFFF" android:pathData="M2,20.2c1.2,0 1.8,-0.8 3,-0.8s1.8,0.8 3,0.8s1.8,-0.8 3,-0.8s1.8,0.8 3,0.8s1.8,-0.8 3,-0.8s1.8,0.8 3,0.8v1.3c-1.2,0 -1.8,-0.8 -3,-0.8s-1.8,0.8 -3,0.8s-1.8,-0.8 -3,-0.8s-1.8,0.8 -3,0.8s-1.8,-0.8 -3,-0.8s-1.8,0.8 -3,0.8z" />
+</vector>

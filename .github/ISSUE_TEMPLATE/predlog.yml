@@ -1,0 +1,14 @@
+name: Predlog
+description: Ideja za novu mogućnost
+labels: [enhancement]
+body:
+  - type: textarea
+    id: ideja
+    attributes:
+      label: Šta bi voleo da aplikacija radi
+    validations:
+      required: true
+  - type: textarea
+    id: zasto
+    attributes:
+      label: Zašto, i kako to sad rešavaš

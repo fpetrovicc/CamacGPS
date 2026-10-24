@@ -1,0 +1,25 @@
+name: Drugi model trackera
+description: Tracker odgovara u formatu koji aplikacija ne razume
+labels: [tracker]
+body:
+  - type: input
+    id: model
+    attributes:
+      label: Model i firmver
+      description: Firmver piše na početku odgovora na check123456
+      placeholder: "TK905, XM_TK905_SW_5.1"
+    validations:
+      required: true
+  - type: textarea
+    id: g
+    attributes:
+      label: Odgovor na G123456#
+      description: Obriši PIN i brojeve telefona.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: check
+    attributes:
+      label: Odgovor na check123456
+      render: text

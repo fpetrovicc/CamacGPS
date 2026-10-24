@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Čamac sa štapom i plovkom. Sadržaj je u bezbednoj zoni (središnjih 66dp). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- štap -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#E8D9B0"
+        android:strokeWidth="2.2"
+        android:strokeLineCap="round"
+        android:pathData="M60,56Q66,40 78,33" />
+    <!-- strunа -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeAlpha="0.7"
+        android:strokeWidth="1"
+        android:pathData="M78,33L79,62" />
+    <!-- plovak -->
+    <path android:fillColor="#D98C4A" android:pathData="M79,60.5a2.6,2.6 0,1 1,0 5.2a2.6,2.6 0,1 1,0 -5.2z" />
+    <!-- kabina -->
+    <path android:fillColor="#FFFFFF" android:pathData="M40,47h15v10h-15z" />
+    <path android:fillColor="#2E5E4E" android:pathData="M43,50h4v4h-4zM49,50h4v4h-4z" />
+    <!-- trup -->
+    <path android:fillColor="#E8D9B0" android:pathData="M28,57L74,57L66,68L36,68Z" />
+    <!-- voda -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeAlpha="0.85"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M28,74q5,-3.5 10,0t10,0t10,0t10,0t10,0" />
+</vector>

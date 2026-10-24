@@ -1,0 +1,35 @@
+name: Greška
+description: Nešto ne radi kako treba
+labels: [bug]
+body:
+  - type: textarea
+    id: opis
+    attributes:
+      label: Šta se desilo
+      description: Šta si uradio i šta se desilo umesto očekivanog.
+    validations:
+      required: true
+  - type: input
+    id: verzija
+    attributes:
+      label: Verzija aplikacije
+      description: Podešavanja → Ažuriranja
+      placeholder: "1.1.0"
+    validations:
+      required: true
+  - type: input
+    id: telefon
+    attributes:
+      label: Telefon i Android
+      placeholder: "Samsung Galaxy A56, Android 15"
+  - type: input
+    id: tracker
+    attributes:
+      label: Model trackera
+      placeholder: "TKSTAR TK915"
+  - type: textarea
+    id: poruka
+    attributes:
+      label: Poruka trackera (ako je vezano za odgovor)
+      description: Obriši PIN i brojeve telefona pre slanja.
+      render: text

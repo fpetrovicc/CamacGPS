@@ -1,0 +1,13 @@
+# Kategorije za automatske beleške uz izdanje (generate_release_notes)
+changelog:
+  exclude:
+    authors: [dependabot]
+  categories:
+    - title: Novo
+      labels: [enhancement]
+    - title: Ispravke
+      labels: [bug]
+    - title: Podrška za trackere
+      labels: [tracker]
+    - title: Ostalo
+      labels: ["*"]
