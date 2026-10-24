@@ -125,8 +125,11 @@ app/src/main/java/com/camac/tracker/
 ├── sms/
 │   ├── SmsSender.kt         SmsManager + PendingIntent ACTION_SENT (rezultat slanja)
 │   ├── SmsReceiver.kt       manifest receiver SMS_RECEIVED → notifikacija ako je od trackera
-│   └── Notifier.kt          kanali: replies, alarms (HIGH), export (LOW), updates
+│   │                        (i gasi podsetnik "nema podataka")
+│   ├── SilenceActionReceiver.kt  dugmad iz notifikacije: "Pošalji proveru" (G#) / "U redu"
+│   └── Notifier.kt          kanali: replies, alarms (HIGH), export (LOW), updates, status
 ├── work/ExportWorker.kt     nedeljni izvoz (WorkManager periodic 7d, KEEP)
+├── work/SilenceWorker.kt    dnevna provera kad je stigla poslednja poruka → notifikacija (BEZ SMS-a)
 ├── update/
 │   ├── UpdateManager.kt     GitHub Releases API → poredi versionName → skida .apk → PackageInstaller
 │   └── InstallResultReceiver.kt  STATUS_PENDING_USER_ACTION → pokreće sistemski dijalog
@@ -149,6 +152,12 @@ Resursi: `res/font/manrope_{regular,medium,semibold,bold}.ttf` (OFL), `drawable/
 `src/debug/res/values/strings.xml` (naziv test verzije).
 
 ## Ključne odluke (i zašto)
+
+- **Aplikacija NIKAD ne šalje SMS automatski.** Svaki SMS košta korisnika; šalje se samo na dodir.
+  Podsetnik „Nema podataka od trackera X dana” (`SilenceCheck`, podrazumevano 7 dana, 0 = isključeno)
+  samo pita: „Pošalji proveru” (jedan `G#`) ili „U redu”. Posle oba ćuti još isti broj dana.
+  Prikazuje se kao kartica na Početnoj i kao notifikacija (najviše jednom po periodu).
+  Aplikacija vidi samo SMS, pa „nema poruka” može značiti i da niko nije proveravao — tekst to kaže.
 
 - **Bez baze**: istorija = sistemsko SMS sanduče. Kad aplikacija koja nije default SMS app pošalje
   preko `SmsManager`-a, sistem sam upisuje poslatu poruku u provider, pa se vide i komande iz Poruka.
@@ -206,7 +215,7 @@ TK905/TK915 dokumentacije i **nisu potvrđene na ovom uređaju** — proveravaj 
 2. Podsetnik za obnovu paketa na SIM-u trackera (dan pre isteka).
 3. Dnevnik ulova uz pecanje (riba, mamac, slika) + mapa dobrih mesta.
 4. Vodostaj Save (RHMZ) — prvo proveriti izvor podataka.
-5. Automatska dnevna provera (`G#`) + upozorenje ako tracker ne odgovori ili baterija < 30 %.
+5. ~~Automatska dnevna provera~~ — odbijeno (troši SMS). Umesto toga urađen podsetnik bez SMS-a (vidi Ključne odluke).
 6. Prikaz rute iz Ruhavik/GPS-Trace (ako postoji API).
 7. Drive API (OAuth) umesto SAF-a ako nedeljni upis ne bude pouzdan.
 8. Kasnije: AGP 9 / Gradle 9 / novi Kotlin kad sve bude stabilno.

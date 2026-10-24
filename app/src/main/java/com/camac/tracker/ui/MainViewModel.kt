@@ -32,6 +32,7 @@ import com.camac.tracker.sms.SmsSender
 import com.camac.tracker.update.UpdateInfo
 import com.camac.tracker.update.UpdateManager
 import com.camac.tracker.work.ExportWorker
+import com.camac.tracker.work.SilenceWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -116,6 +117,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             ctx, sentReceiver, IntentFilter(SmsSender.ACTION_SENT), ContextCompat.RECEIVER_NOT_EXPORTED
         )
         ExportWorker.schedule(ctx, _state.value.settings.weeklyExport)
+        SilenceWorker.schedule(ctx)
         refresh()
         checkForUpdate(manual = false)
     }
@@ -133,6 +135,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun refresh() {
+        // Podešavanja menjaju i pozadinski poslovi / dugmad iz notifikacija → uvek čitaj sveže
+        _state.update { it.copy(settings = prefs.loadSettings()) }
         viewModelScope.launch {
             val number = _state.value.settings.trackerNumber
             val messages = withContext(Dispatchers.IO) { SmsRepository.loadConversation(ctx, number) }
@@ -209,6 +213,20 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun dismissPending() = _state.update { it.copy(pending = null) }
+
+    // ---------- "Tracker se dugo nije javio" (bez automatskog SMS-a) ----------
+
+    /** "U redu" — sakrij upozorenje; javiće se ponovo posle istog broja dana bez poruka. */
+    fun dismissSilence() {
+        updateSettings { it.copy(staleDismissedAt = System.currentTimeMillis()) }
+        Notifier.cancelSilence(ctx)
+    }
+
+    /** "Pošalji proveru" — jedan SMS (Status lokacije) na zahtev korisnika, pa sakrij upozorenje. */
+    fun checkSilence() {
+        send(CommandCatalog.byId(CommandCatalog.LOCATION))
+        dismissSilence()
+    }
     fun consumeSnackbar() = _state.update { it.copy(snackbar = null) }
     fun showMessage(text: String) = _state.update { it.copy(snackbar = text) }
 

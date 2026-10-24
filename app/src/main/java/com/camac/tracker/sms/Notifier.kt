@@ -23,9 +23,11 @@ object Notifier {
     private const val CH_ALARMS = "alarms"
     private const val CH_EXPORT = "export"
     private const val CH_UPDATES = "updates"
+    private const val CH_STATUS = "status"
 
     private const val ID_EXPORT = 2001
     private const val ID_UPDATE = 2002
+    private const val ID_SILENCE = 2003
 
     fun createChannels(context: Context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
@@ -38,6 +40,8 @@ object Notifier {
             NotificationChannel(CH_EXPORT, "Izvoz istorije", NotificationManager.IMPORTANCE_LOW)
                 .apply { description = "Nedeljni izvoz poruka na Google Drive" },
             NotificationChannel(CH_UPDATES, "Ažuriranja aplikacije", NotificationManager.IMPORTANCE_DEFAULT),
+            NotificationChannel(CH_STATUS, "Tracker se ne javlja", NotificationManager.IMPORTANCE_DEFAULT)
+                .apply { description = "Podsetnik kad dugo nema poruka od trackera (bez slanja SMS-a)" },
         ).forEach(nm::createNotificationChannel)
     }
 
@@ -105,6 +109,39 @@ object Notifier {
                 .setContentIntent(pi)
                 .setAutoCancel(true)
         )
+    }
+
+    /** "Nema podataka od trackera X dana" — sa dugmadima "Pošalji proveru" i "U redu". */
+    fun showSilence(context: Context, days: Long, lastContact: Long) {
+        fun action(action: String, code: Int) = PendingIntent.getBroadcast(
+            context, code,
+            Intent(context, SilenceActionReceiver::class.java).setAction(action),
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        val last = java.text.SimpleDateFormat("dd.MM. HH:mm", java.util.Locale.getDefault())
+            .format(java.util.Date(lastContact))
+        post(
+            context, ID_SILENCE,
+            NotificationCompat.Builder(context, CH_STATUS)
+                .setSmallIcon(R.drawable.ic_stat_boat)
+                .setContentTitle("Nema podataka od trackera $days dana")
+                .setContentText("Poslednja poruka: $last. Želiš li da proveriš?")
+                .setStyle(
+                    NotificationCompat.BigTextStyle().bigText(
+                        "Poslednja poruka od trackera stigla je $last. Možda je sve u redu i niko nije " +
+                            "proveravao, a možda je baterija slaba, SIM bez kredita ili nema signala."
+                    )
+                )
+                .setColor(ContextCompat.getColor(context, R.color.pine))
+                .setContentIntent(openAppIntent(context))
+                .addAction(0, "Pošalji proveru", action(SilenceActionReceiver.ACTION_CHECK, 31))
+                .addAction(0, "U redu", action(SilenceActionReceiver.ACTION_DISMISS, 32))
+                .setAutoCancel(true)
+        )
+    }
+
+    fun cancelSilence(context: Context) {
+        NotificationManagerCompat.from(context).cancel(ID_SILENCE)
     }
 
     fun showUpdateAvailable(context: Context, version: String) {

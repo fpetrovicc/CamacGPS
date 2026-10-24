@@ -21,6 +21,9 @@ data class Settings(
     val lastExportAt: Long = 0,
     val fishingSince: Long? = null, // pecanje u toku od…
     val pendingPin: String? = null, // novi PIN koji čeka potvrdu trackera
+    val staleAlertDays: Int = 7,    // upozori ako nema poruka od trackera ovoliko dana (0 = isključeno)
+    val staleDismissedAt: Long = 0, // kad je korisnik poslednji put rekao "U redu" / "Pošalji proveru"
+    val staleNotifiedAt: Long = 0,  // kad je poslednji put poslata notifikacija o tome
 ) {
     val hasHome: Boolean get() = homeLat != null && homeLon != null
     val isFishing: Boolean get() = fishingSince != null
@@ -50,6 +53,9 @@ class Prefs(context: Context) {
         lastExportAt = sp.getLong("last_export", 0),
         fishingSince = sp.getLong("fishing_since", 0).takeIf { it > 0 },
         pendingPin = sp.getString("pending_pin", null),
+        staleAlertDays = sp.getInt("stale_alert_days", 7),
+        staleDismissedAt = sp.getLong("stale_dismissed_at", 0),
+        staleNotifiedAt = sp.getLong("stale_notified_at", 0),
     )
 
     fun saveSettings(s: Settings) {
@@ -70,6 +76,9 @@ class Prefs(context: Context) {
             .putLong("last_export", s.lastExportAt)
             .putLong("fishing_since", s.fishingSince ?: 0)
             .putString("pending_pin", s.pendingPin)
+            .putInt("stale_alert_days", s.staleAlertDays)
+            .putLong("stale_dismissed_at", s.staleDismissedAt)
+            .putLong("stale_notified_at", s.staleNotifiedAt)
             .apply()
     }
 

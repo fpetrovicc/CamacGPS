@@ -169,6 +169,10 @@ fun SettingsScreen(
             SwitchRow("Notifikacija kad tracker odgovori ili pošalje alarm", s.notifications) { v ->
                 onUpdate { it.copy(notifications = v) }
             }
+            NumberSetting(
+                "Podseti ako nema poruka od trackera (dana)", s.staleAlertDays, 0..60,
+                "0 = isključeno. Aplikacija nikad sama ne šalje SMS — samo te podseti, a ti biraš da li da proveriš."
+            ) { v -> onUpdate { it.copy(staleAlertDays = v) } }
         }
 
         // ---------- Ažuriranja ----------

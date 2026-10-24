@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DirectionsBoat
 import androidx.compose.material.icons.filled.ErrorOutline
+import androidx.compose.material.icons.filled.HourglassEmpty
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material.icons.filled.NightsStay
@@ -70,6 +71,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.camac.tracker.data.CommandCatalog
+import com.camac.tracker.data.SilenceCheck
 import com.camac.tracker.data.TrackerCommand
 import com.camac.tracker.data.TrackerParser
 import com.camac.tracker.data.TrackerReply
@@ -87,6 +89,8 @@ fun HomeScreen(
     onDismissPending: () -> Unit,
     onRefreshWeather: () -> Unit,
     onInstallUpdate: () -> Unit,
+    onDismissSilence: () -> Unit,
+    onCheckSilence: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LaunchedEffect(Unit) { onRefreshWeather() }
@@ -107,6 +111,11 @@ fun HomeScreen(
         }
 
         state.recentAlarm?.let { AlarmCard(it.body, it.date, now) }
+        state.lastIncoming?.let { last ->
+            if (SilenceCheck.isDue(last.date, state.settings, now)) {
+                SilenceCard(last.date, now, onCheckSilence, onDismissSilence)
+            }
+        }
         state.pending?.let { PendingCard(it, now, onDismissPending) }
 
         HeroCard(state, now)
@@ -164,7 +173,8 @@ private fun HeroCard(state: UiState, now: Long) {
     val status = boatStatus(state, now)
     val last = state.lastIncoming
     val bat = state.lastBattery?.reply?.battery
-    val stale = last != null && now - last.date > 2 * 24 * 60 * 60 * 1000L
+    val staleDays = state.settings.staleAlertDays
+    val stale = last != null && staleDays > 0 && now - last.date >= staleDays * SilenceCheck.DAY_MS
 
     Card(
         shape = RoundedCornerShape(28.dp),
@@ -206,13 +216,6 @@ private fun HeroCard(state: UiState, now: Long) {
                     style = MaterialTheme.typography.bodyMedium,
                     color = if (stale) Color(0xFFF4A9A3) else Color.White.copy(alpha = 0.85f)
                 )
-                if (stale) {
-                    Text(
-                        "Tracker se dugo nije javio — proveri bateriju i kredit na SIM-u.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Color(0xFFF4A9A3)
-                    )
-                }
                 state.settings.fishingSince?.let {
                     Text(
                         "Krenuo u ${formatTime(it)} · slanje na svakih ${state.settings.fishInterval} s",
@@ -665,6 +668,48 @@ private fun AlarmCard(body: String, date: Long, now: Long) {
                 Text("Alarm — ${formatRelative(date, now)}", style = MaterialTheme.typography.titleMedium)
                 Text(body, maxLines = 3, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.bodyMedium)
             }
+        }
+    }
+}
+
+/** Dugo nema poruka od trackera — samo pita, ne šalje ništa samo. */
+@Composable
+private fun SilenceCard(lastContact: Long, now: Long, onCheck: () -> Unit, onDismiss: () -> Unit) {
+    val days = SilenceCheck.daysSince(lastContact, now)
+    Card(
+        Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)
+    ) {
+        Column(Modifier.padding(16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Default.HourglassEmpty, null)
+                Spacer(Modifier.width(12.dp))
+                Text(
+                    "Nema podataka od trackera $days ${if (days % 10 == 1L && days % 100 != 11L) "dan" else "dana"}",
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+            Spacer(Modifier.height(6.dp))
+            Text(
+                "Poslednja poruka stigla je ${formatDateTime(lastContact)}. Možda je sve u redu i niko nije " +
+                    "proveravao, a možda je baterija slaba, SIM bez kredita ili nema signala.",
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Spacer(Modifier.height(12.dp))
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End)
+            ) {
+                TextButton(onClick = onDismiss) { Text("U redu") }
+                Button(onClick = onCheck) { Text("Pošalji proveru") }
+            }
+            Text(
+                "Provera šalje jedan SMS (Status lokacije).",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onTertiaryContainer.copy(alpha = 0.75f),
+                modifier = Modifier.align(Alignment.End)
+            )
         }
     }
 }

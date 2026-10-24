@@ -22,6 +22,8 @@ class SmsReceiver : BroadcastReceiver() {
         val settings = Prefs(context).loadSettings()
         val from = parts.first().originatingAddress
         if (!PhoneNumbers.same(from, settings.trackerNumber)) return
+        // tracker se javio → podsetnik "nema podataka" više ne važi
+        Notifier.cancelSilence(context)
         if (!settings.notifications) return
 
         val body = parts.joinToString("") { it.messageBody ?: "" }

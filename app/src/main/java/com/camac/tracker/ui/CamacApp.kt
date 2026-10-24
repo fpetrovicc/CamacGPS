@@ -155,6 +155,8 @@ fun CamacApp(vm: MainViewModel, onRequestPermissions: () -> Unit) {
                     onDismissPending = vm::dismissPending,
                     onRefreshWeather = { vm.loadWeather() },
                     onInstallUpdate = vm::installUpdate,
+                    onDismissSilence = vm::dismissSilence,
+                    onCheckSilence = vm::checkSilence,
                 )
                 Tab.COMMANDS -> CommandsScreen(state = state, onRun = runCommand)
                 Tab.HISTORY -> HistoryScreen(

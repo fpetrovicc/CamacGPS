@@ -51,6 +51,11 @@
             </intent-filter>
         </receiver>
 
+        <!-- Dugmad iz notifikacije "Nema podataka od trackera" -->
+        <receiver
+            android:name=".sms.SilenceActionReceiver"
+            android:exported="false" />
+
         <!-- Rezultat instalacije nove verzije -->
         <receiver
             android:name=".update.InstallResultReceiver"
