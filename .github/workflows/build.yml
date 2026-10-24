@@ -24,7 +24,7 @@ jobs:
           java-version: 17
 
       # Proverava gradle-wrapper.jar i kešira Gradle
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v6
 
       # Na Windowsu git ne čuva "izvršni" bit, pa ga ovde vraćamo
       - run: chmod +x gradlew
